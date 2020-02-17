@@ -31,6 +31,18 @@ public class BookRepositoryTest {
                 .addAsManifestResource("META-INF/test-persistence.xml", "persistence.xml");
     }
 
+    @Test(expected = Exception.class)
+    public void findWithInvalidId() {
+        bookRepository.find(null);
+    }
+
+    @Test(expected = Exception.class)
+    public void createInvalidBook() {
+        // The entity manager will try to persist the entity and then the JPA will rollback the transaction because the title cannot be null
+        Book book = new Book("isbn", null, 12F, 123, Language.ENGLISH, new Date(), "http://blahblah", "description");
+        bookRepository.create(book);
+    }
+
     @Test
     public void create() throws Exception {
         // Test counting books
