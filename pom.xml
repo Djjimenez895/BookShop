@@ -19,6 +19,11 @@
         <version.shrinkwrap>1.2.6</version.shrinkwrap>
         <!-- Plugins -->
         <version.sunfire.plugin>2.19.1</version.sunfire.plugin>
+        <version.swagger>1.5.12</version.swagger>
+        <version.swagger.plugin>3.1.8</version.swagger.plugin>
+        <version.site.plugin>3.7.1</version.site.plugin>
+        <version.download.plugin>1.4.1</version.download.plugin>
+        <version.swagger.hibernate>1.5.22</version.swagger.hibernate>
     </properties>
 
     <dependencyManagement>
@@ -39,6 +44,12 @@
             <artifactId>junit</artifactId>
             <version>${version.junit}</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>${version.swagger}</version>
         </dependency>
 
         <dependency>
@@ -140,6 +151,65 @@
                                     <type>jar</type>
                                 </artifactItem>
                             </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>com.github.kongchen</groupId>
+                <artifactId>swagger-maven-plugin</artifactId>
+                <version>${version.swagger.plugin}</version>
+                <configuration>
+                    <apiSources>
+                        <apiSource>
+                            <springmvc>false</springmvc>
+                            <locations>com.pluralsight.bookstore.rest</locations>
+                            <schemes>http,https</schemes>
+                            <host>localhost:8080</host>
+                            <basePath>/bookstore-back/api</basePath>
+                            <outputFormats>yaml,json</outputFormats>
+                            <info>
+                                <title>BookStore APIs</title>
+                                <version>1.0.0</version>
+                                <description>BookStore APIs exposed from a Java EE back-end to an Angular front-end</description>
+                            </info>
+                            <swaggerDirectory>${basedir}/src/main/webapp</swaggerDirectory>
+                            <attachSwaggerArtifact>true</attachSwaggerArtifact>
+                        </apiSource>
+                    </apiSources>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>io.swagger</groupId>
+                        <artifactId>swagger-hibernate-validations</artifactId>
+                        <version>${version.swagger.hibernate}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>com.googlecode.maven-download-plugin</groupId>
+                <artifactId>download-maven-plugin</artifactId>
+                <version>${version.download.plugin}</version>
+                <executions>
+                    <execution>
+                        <phase>site</phase>
+                        <id>swagger-ui</id>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <configuration>
+                            <url>https://github.com/swagger-api/swagger-ui/archive/master.tar.gz</url>
+                            <unpack>true</unpack>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>

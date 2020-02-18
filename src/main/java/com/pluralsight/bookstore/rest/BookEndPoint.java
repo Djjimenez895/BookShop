@@ -2,6 +2,10 @@ package com.pluralsight.bookstore.rest;
 
 import com.pluralsight.bookstore.model.Book;
 import com.pluralsight.bookstore.repository.BookRepository;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 import javax.inject.Inject;
 import javax.validation.constraints.Min;
@@ -14,10 +18,16 @@ import java.net.URI;
 import java.util.List;
 
 @Path("/books")
+@Api("Book")
 public class BookEndPoint {
     @GET
     @Path("/{id : \\d+}")
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Returns a book given an id", response = Book.class)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Book found"),
+            @ApiResponse(code = 404, message = "Book not found")
+    })
     public Response getBook(@PathParam("id") @Min(1) Long id) {
         Book book = bookRepository.find(id);
 

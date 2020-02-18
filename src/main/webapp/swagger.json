@@ -1,0 +1,144 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "BookStore APIs exposed from a Java EE back-end to an Angular front-end",
+    "version" : "1.0.0",
+    "title" : "BookStore APIs"
+  },
+  "host" : "localhost:8080",
+  "basePath" : "/bookstore-back/api",
+  "tags" : [ {
+    "name" : "Book"
+  } ],
+  "schemes" : [ "http", "https" ],
+  "paths" : {
+    "/books" : {
+      "get" : {
+        "tags" : [ "Book" ],
+        "operationId" : "getBooks",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Book" ],
+        "operationId" : "createBook",
+        "consumes" : [ "application/json" ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/books/count" : {
+      "get" : {
+        "tags" : [ "Book" ],
+        "operationId" : "countBooks",
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/books/{id}" : {
+      "get" : {
+        "tags" : [ "Book" ],
+        "summary" : "Returns a book given an id",
+        "description" : "",
+        "operationId" : "getBook",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "minimum" : 1,
+          "pattern" : "\\d+",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Book found",
+            "schema" : {
+              "$ref" : "#/definitions/Book"
+            }
+          },
+          "404" : {
+            "description" : "Book not found"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Book" ],
+        "operationId" : "deleteBook",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "minimum" : 1,
+          "pattern" : "\\d+",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Book" : {
+      "type" : "object",
+      "required" : [ "isbn", "title" ],
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "title" : {
+          "type" : "string",
+          "minLength" : 1,
+          "maxLength" : 200
+        },
+        "description" : {
+          "type" : "string",
+          "minLength" : 1,
+          "maxLength" : 10000
+        },
+        "unitCost" : {
+          "type" : "number",
+          "format" : "float",
+          "minimum" : 1
+        },
+        "isbn" : {
+          "type" : "string",
+          "minLength" : 1,
+          "maxLength" : 50
+        },
+        "publicationDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "nbOfPages" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "imageUrl" : {
+          "type" : "string"
+        },
+        "language" : {
+          "type" : "string",
+          "enum" : [ "ENGLISH", "FRENCH", "SPANISH", "PORTUGUESE", "ITALIAN", "FINISH", "GERMAN", "DEUTSCH", "RUSSIAN" ]
+        }
+      },
+      "description" : "Book resource representation"
+    }
+  }
+}
